@@ -7,6 +7,7 @@ pkgdesc='Complete solution to record, convert and stream audio and video with OM
 arch=('riscv64')
 url=https://ffmpeg.org/
 prefix=/opt/ffmpeg-omx
+install=ffmpeg-omx.install
 license=(GPL3)
 depends=(
   alsa-lib
@@ -62,7 +63,7 @@ depends=(
   v4l-utils
   xz
   zlib
-  libsf-omx-il.so
+  libOMX_Core.so
 )
 makedepends=(
   amf-headers
@@ -209,8 +210,9 @@ build() {
 
 package() {
   make DESTDIR="${pkgdir}" -C ffmpeg install
-  echo "$prefix/lib" > "${srcdir}/ffmpeg-omx.conf"
-  install -D -m644 -t ${pkgdir}/etc/ld.so.conf.d/ "${srcdir}/ffmpeg-omx.conf"
+
+  install -dm0755 "$pkgdir/etc/ld.so.conf.d/"
+  echo "$prefix/lib" > "$pkgdir/etc/ld.so.conf.d/ffmpeg-omx.conf"
 }
 
 # vim:set sw=2 ts=2 et:
